@@ -102,6 +102,7 @@ class CSST_Nav_Walker extends Walker_Nav_Menu {
 			$dropdown_label = esc_html__( 'Sub-Menu', 'csst-nav' );
 			$dropdown       = "$icon<span class='screen-reader-text'>$dropdown_label</span>";
 			$link          .= "<a href='#' class='$class-toggle_link $class-link $class-toggle_link-closed'>$dropdown</a>";
+		
 		}
 
 		// Since it's passed by reference, we don't need to return anything.

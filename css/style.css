@@ -1,0 +1,58 @@
+				.csst_nav_walker-item {
+	display: block;
+	position: relative;
+}
+
+a.csst_nav_walker-item-link {
+	border: none;
+	font-weight: 600;
+}
+
+a.csst_nav_walker-item-link:hover,
+a.csst_nav_walker-item-link:active,
+a.csst_nav_walker-item-link:focus {
+	text-decoration: underline;
+}
+
+.csst_nav_walker-submenu {
+	margin-left: 2em;
+}
+
+.csst_nav_walker-hide,
+.csst_nav_walker-show {
+	display: block;
+	overflow: hidden;
+}
+
+.csst_nav_walker-hide {
+	max-height: 0;
+	opacity: 0;
+}
+
+.csst_nav_walker-show {
+	transition: opacity .5s ease-in-out;
+	max-height: auto;
+	opacity: 1;
+}
+
+.csst_nav_walker-get_icon {
+	width: 0; 
+	height: 0; 
+	border-style: solid;
+	border-width: .5em;
+	border-color: transparent;
+	display: inline-block;
+	transform: scale( .65 );
+	vertical-align: middle;
+	margin: .05em .2em 0;
+}
+
+.csst_nav_walker-get_icon-down {
+	border-bottom-color: none;
+	border-top: calc( 1em * .866 ) solid currentColor;
+}
+
+.csst_nav_walker-get_icon-up {
+	border-top: none;
+	border-bottom: calc( 1em * .866 ) solid currentColor;
+}

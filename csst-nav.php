@@ -41,10 +41,5 @@ define( 'CSST_NAV_VERSION', '0.1' );
 define( 'CSST_NAV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CSST_NAV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
-function csst_nav_unreg() {
-	unregister_widget( 'WP_Nav_Menu_Widget' );
-}
-add_action( 'widgets_init', 'csst_nav_unreg' );
-
 require_once( CSST_NAV_PLUGIN_DIR . 'class.csst-nav-walker.php' );
-require_once( CSST_NAV_PLUGIN_DIR . 'class.csst-nav-widget.php' );
+require_once( CSST_NAV_PLUGIN_DIR . 'class.csst-nav-shortcode.php' );
