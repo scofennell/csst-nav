@@ -33,13 +33,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Make sure we don't expose any info if called directly
 if ( ! function_exists( 'add_action' ) ) {
-	echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
+	echo 'Hi!  I\'m just a plugin, not much I can do when called directly.';
 	exit;
 }
 
+/**
+ * Define a version that's more easily accessible than the docblock one,
+ * for cache-busting.
+ */
 define( 'CSST_NAV_VERSION', '0.1' );
+
+// Define paths and urls for easy loading of files.
 define( 'CSST_NAV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CSST_NAV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'CSST_NAV_INC_DIR', plugin_dir_path( __FILE__ ) . 'inc/' );
 
-require_once( CSST_NAV_PLUGIN_DIR . 'class.csst-nav-walker.php' );
-require_once( CSST_NAV_PLUGIN_DIR . 'class.csst-nav-shortcode.php' );
+// Grab our custom nav walker class.
+require_once( CSST_NAV_INC_DIR . 'class.csst-nav-walker.php' );
+
+// Grab our shortcode class.
+require_once( CSST_NAV_INC_DIR . 'class.csst-nav-shortcode.php' );

@@ -1,58 +1,140 @@
-				.csst_nav_walker-item {
-	display: block;
-	position: relative;
-}
+/**
+ * Our plugin styles.
+ *
+ * This provides some really minimal styling in order to help visualize things
+ * like :hover status, click handlers, nesting, show/hide, etc. 
+ *
+ * @package WordPress
+ * @subpackage Twenty_Fifteen
+ * @since Twenty Fifteen 1.0
+ */
 
-a.csst_nav_walker-item-link {
-	border: none;
-	font-weight: 600;
-}
+/**
+ * Table of Contents
+ *
+ * 1.0. Nav Links.
+ * 2.0. Submenus.
+ * 3.0. Show/Hide.
+ * 4.0. Toggle Icons.
+ */
 
-a.csst_nav_walker-item-link:hover,
-a.csst_nav_walker-item-link:active,
-a.csst_nav_walker-item-link:focus {
-	text-decoration: underline;
-}
+/**
+ * 1.0. Nav Links.
+ */
 
-.csst_nav_walker-submenu {
-	margin-left: 2em;
-}
+	/**
+	 * In our example, we're doing vertical menu items.  Could just as easily
+	 * float or flexbox these instead.
+	 */
+	.csst_nav_walker-item { display: block; }
 
-.csst_nav_walker-hide,
-.csst_nav_walker-show {
-	display: block;
-	overflow: hidden;
-}
+	/**
+	 * Defeat the typography styles that ship with twentyfifteen.
+	 */
+	a.csst_nav_walker-item-link {
+		border: none;
+		font-weight: 600;
+	}
 
-.csst_nav_walker-hide {
-	max-height: 0;
-	opacity: 0;
-}
+	/**
+	 * State effects for our nav links.
+	 */
+	a.csst_nav_walker-item-link:hover,
+	a.csst_nav_walker-item-link:active,
+	a.csst_nav_walker-item-link:focus { text-decoration: underline; }
 
-.csst_nav_walker-show {
-	transition: opacity .5s ease-in-out;
-	max-height: auto;
-	opacity: 1;
-}
+/**
+ * 2.0. Submenus.
+ */
 
-.csst_nav_walker-get_icon {
-	width: 0; 
-	height: 0; 
-	border-style: solid;
-	border-width: .5em;
-	border-color: transparent;
-	display: inline-block;
-	transform: scale( .65 );
-	vertical-align: middle;
-	margin: .05em .2em 0;
-}
+ 	/**
+ 	 * A bit of whitespace on the left to suggest nesting.
+ 	 */
+	.csst_nav_walker-submenu { margin-left: 2em; }
 
-.csst_nav_walker-get_icon-down {
-	border-bottom-color: none;
-	border-top: calc( 1em * .866 ) solid currentColor;
-}
+/**
+ * 3.0. Show/Hide.
+ */
 
-.csst_nav_walker-get_icon-up {
-	border-top: none;
-	border-bottom: calc( 1em * .866 ) solid currentColor;
-}
+	/**
+	 * As a Show/Hide element, whether you're currently showing or hiding,
+	 * it will be helpful to have these values.
+	 */
+	.csst_nav_walker-hide,
+	.csst_nav_walker-show {
+		display: block;
+		overflow: hidden;
+	}
+
+	/**
+	 * The hidden state.
+	 *
+	 * 1. Unlike height, max-height would allow us to animate the height,
+	 *    if we wanted to.
+	 * 2. We'll fade the submenus in.
+	 */
+	.csst_nav_walker-hide {
+		max-height: 0; /* 1 */
+		opacity: 0;    /* 2 */
+	}
+
+	/**
+	 * The revealed state.
+	 *
+	 * 1. Fade the submenu in.
+	 * 2. Allow it to be as tall as it needs to be.
+	 */
+	.csst_nav_walker-show {
+		transition: opacity .5s ease-in; /* 1 */
+		max-height: auto;                /* 2 */
+	}
+
+/**
+ * 4.0. Toggle Icons.
+ */
+
+ 	/**
+ 	 * A class carried by all of our toggle icons. 
+ 	 *
+ 	 * 1. This sets us up for an equilateral triangle.  Don't edit this.
+ 	 * 2. We'll color the "active" border as needed for each individual icon.
+ 	 * 3. Make sure they're small enough to not influence the line-height. Don't edit this.
+ 	 * 4. Nothing special, just some horizontal whitespace to taste.
+ 	 * 5. Our one-stop shop for messing with the size of the icon, rather than
+ 	 *    re-calculating appropriate border-width.  This is what you'd edit for
+ 	 *    larger/smaller triangles.
+ 	 * 
+ 	 * These are CSS triangles.
+ 	 * @see https://css-tricks.com/snippets/css/css-triangle/
+ 	 */
+	.csst_nav_walker-get_icon {
+		width: 0; 
+		height: 0; 
+		border-style: solid;
+		border-width: 1em;         /* 1 */ 
+		border-color: transparent; /* 2 */
+		display: inline-block;     
+		font-size: .5em;           /* 3 */          
+		vertical-align: middle;
+		margin: 0 .5em;            /* 4 */
+		transform: scale( .66 );   /* 5 */
+	}
+
+	/**
+	 * A down-pointing CSS equilateral triangle.
+	 *
+	 * 1. The magic number for ending up with an equilateral triangle.
+	 * 2. Meh, I'll admit it, I'm nudging.  Edit to taste.
+	 */
+	.csst_nav_walker-get_icon-down {
+		border-top: 1.66em solid currentColor; /* 1 */
+		margin-top: .66em;                      /* 2 */
+	}
+
+	/**
+	 * A up-pointing CSS equilateral triangle.
+	 */
+	.csst_nav_walker-get_icon-up {
+		border-bottom: 1.66em solid currentColor;
+		margin-top: -.66em;
+	}
