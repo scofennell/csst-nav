@@ -185,6 +185,12 @@ EOT;
 		// Args for a call to wp_nav_menu().
 		$menu_args = array(
 
+			// Instead of wrapping each menu item as list item, let's do a span.
+			'after' => '</span>',
+
+			// Instead of wrapping each menu item as list item, let's do a span.
+			'before' => '<span class="%s">',
+
 			// Nope, we don't need extra markup wrapping our menu.
 			'container' => FALSE,
 

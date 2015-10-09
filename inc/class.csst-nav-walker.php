@@ -13,54 +13,68 @@
  */
 class CSST_Nav_Walker extends Walker_Nav_Menu {
 
-	// We'll grab a little triangle icon to use in our menu, just wait.
+	// We'll grab a little triangle icon to use for our submenu toggles, just wait.
 	public $icon = '';
 
+	// Will hold the css namespace for our class.
+	public $css_class = '';
+
 	public function __construct() {
+
+		// Set up the namespace for our class.
+		$this -> css_class = strtolower( __CLASS__ );
 
 		// Start our icon class.
 		$svg = new CSST_Nav_SVG;
 		
-		// Grab a triangle.
+		// Grab a triangle for our submenu toggles.
 		$icon = $svg -> get();
 		$this -> icon = $icon;
 
 	}
 
 	/**
-	 * This seems to create a nav menu item.
+	 * Append the opening html for a nav menu item, and the menu item itself.
 	 *
-	 * I'm just pasting these params from trac, with no understanding of them.
-	 *
-	 * @param string $output Passed by reference. Used to append additional content.
-	 * @param object $item   Menu item data object.
-	 * @param int    $depth  Depth of menu item. Used for padding.
-	 * @param array  $args   An array of arguments. @see wp_nav_menu()
-	 * @param int    $id     Current item ID.
+	 * @param string $output Passed by reference. The output for all of the preceding menu items.
+	 * @param object $item   The Post object for this menu item.
+	 * @param int    $depth  The number of levels deep we are in submenu-land.
+	 * @param array  $args   An array of arguments for wp_nav_menu().
+	 * @param int    $id     Allegedly the current item ID -- seems to always just be 0.
 	 */
 	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
 
-		var_dump( $id );
+		// The CSS class for our menu.
+		$class = $this -> css_class;
 
-		/**
-		 * Deal with the class names for the menu item.
-		 * 
-		 * What an un-standardized, un-SMACCS-able mess they are.  Not even going to try to standardize them.
-		 */
-		$classes  = $item -> classes;
-		$class = strtolower( __CLASS__ ) . '-item';
-		$classes[]= $class;
+		$item_class = strtolower( __CLASS__ ) . '-item';
 
-		// Does this menu item have children?
-		//if ( $args -> has_children ) {
-		//	$classes[]= "$class-has_children";
-		//}
+		// The html that this method will append to the menu.
+		$item_output = '';
 
-		$classes  = array_map( 'sanitize_html_class', $classes );
-		$classes  = implode( ' ', $classes );
+		// Grab the class names for the menu item.
+		$classes = $item -> classes;
+
+		// Rename them as per my preferences.
+		$classes = CSST_Nav_Formatting::rename_css_classes( __CLASS__, $classes );
+		
+		// Add our class for this method.
+		$classes[]= $item_class;
+
+		// Expose the classes to filtering.
+		apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth );
+
+		// Convert the classes into a string for output.
+		$classes_str  = implode( ' ', $classes );
 	
-		// This starts the menu item.
-		$output .= "<span class='$classes'>";
+		// Grab the opening html for the menu item, which we specified in wp_nav_menu() in our shortcode.
+		$before = $args -> before;
+
+		// Merge our css classes into the menu item.
+		$before = sprintf( $before, $classes_str );
+
+		// Add the opening html tag to the output for this item.
+		$item_output .= $before;
 
 		// Atts for the link itself.
 		$atts = array();
@@ -69,71 +83,85 @@ class CSST_Nav_Walker extends Walker_Nav_Menu {
 		$atts['rel']    = esc_attr( $item -> xfn );
 		$atts['href']   = esc_url(  $item -> url );
 
+		// Expose the atts to filtering.
+		$atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args, $depth );
+
 		// Combine the atts into a string for inserting into the link tag.
-		$attributes = '';
+		$atts_str = '';
 		foreach ( $atts as $k => $v ) {
 			if ( empty( $v ) ) { continue; }
-			$attributes .= " $k='$v' ";
+			$atts_str .= " $k='$v' ";
 		}
 
-		// Finally!  Build the damn link.
-		$label = wp_kses_post( $item -> title );
-		$link  = "<a $attributes class='$class-link $class-text_link'>$label</a>";
+		// The clickable text for the link.
+		$label = apply_filters( 'the_title', $item -> title, $item -> ID );
 
-		// Since it's passed by reference, we don't need to return anything.
-		$output .= $link;
+		// Finally!  Add the link to the menu item.
+		$item_output .= "<a $atts_str class='$item_class-link $item_class-text_link'>$label</a>";
+		
+		/**
+		 * Append this menu item to the menu.
+		 * Since output is passed by reference, we don't need to return anything.
+		 */
+		$output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
 
 	}
 
 	/**
-	 * I'm not sure how this is any different from end_lvl() but whatever.
-	 * 
-	 * I'm just pasting these params from trac, with no understanding of them.
+	 * Append the closing html for a menu item.
 	 *
-	 * @param string $output Passed by reference. Used to append additional content.
-	 * @param int    $depth  Depth of menu item. Used for padding.
-	 * @param array  $args   An array of arguments. @see wp_nav_menu()
+	 * @param string $output Passed by reference. @see start_el().
+	 * @param int    $depth  Depth of menu item. @see start_el().
+	 * @param array  $args   An array of arguments. @see start_el().
 	 */
 	public function end_el( &$output, $item, $depth = 0, $args = array() ) {
 		
+		// Grab the closing html that we specified in the shortcode.
+		$after = $args -> after;
+
 		// Passed by reference, thus no need to return a value.
-		$output .= "</span>";
+		$output .= $after;
 	
 	}
 
 	/**
 	 * Provide the opening markup for a new menu within our menu (AKA a submenu).
 	 * 
-	 * @param string $output Passed by reference. Used to append additional content.
-	 * @param int    $depth  Depth of menu item. Used for padding.
-	 * @param array  $args   An array of arguments. @see wp_nav_menu()
+	 * @param string $output Passed by reference. @see start_el().
+	 * @param int    $depth  Depth of menu item. @see start_el().
+	 * @param array  $args   An array of arguments. @see start_el().
 	 */
 	public function start_lvl( &$output, $depth = 0, $args = array() ) {
 		
 		// The CSS class for our menu.
-		$class = strtolower( __CLASS__ );
+		$class = $this -> css_class;
 
+		// Grab our svg icon, a little triangle thing.
 		$icon = $this -> icon;
-			
-		$dropdown_label = esc_html__( 'Sub-Menu', 'csst-nav' );
-		$dropdown       = "$icon<span class='screen-reader-text'>$dropdown_label</span>";
-		$output        .= "<a href='#' class='$class-item-toggle_link $class-item-link $class-item-toggle_link-closed'>$dropdown</a>";
+		
+		// Build a toggle link for  dropdown menu.
+		$toggle_text  = esc_html__( 'Sub-Menu', 'csst-nav' );
+		$toggle_label = "$icon<span class='screen-reader-text'>$toggle_text</span>";
+		$toggle_link  = "<a href='#' class='$class-item-toggle_link $class-item-link $class-item-toggle_link-closed'>$toggle_label</a>";
 
+		// Build some classes for our submenu, assuming we want it hidden.
 		$submenu_class = "$class-submenu";
-		$hide_class = "$class-hide";
+		$hide_class    = "$class-hide";
 	
-		$output .= "<span class='$submenu_class $hide_class'>";
+		// Append the toggle link and the hidden submenu to the nav menu.
+		$output .= "
+			$toggle_link
+			<span class='$submenu_class $hide_class'>
+		";
 
 	}
 
 	/**
-	 * This oddly named fellow does nothing other than end a menu item.
+	 * This oddly named fellow does nothing other than end a submenu.
 	 * 
-	 * I'm just pasting these params from trac, with no understanding of them.
-	 *
-	 * @param string $output Passed by reference. Used to append additional content.
-	 * @param int    $depth  Depth of menu item. Used for padding.
-	 * @param array  $args   An array of arguments. @see wp_nav_menu()
+	 * @param string $output Passed by reference. @see start_el().
+	 * @param int    $depth  Depth of menu item. @see start_el().
+	 * @param array  $args   An array of arguments. @see start_el().
 	 */
 	public function end_lvl( &$output, $depth = 0, $args = array() ) {
 

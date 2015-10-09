@@ -5,9 +5,9 @@
  */
 
 /*
-Plugin Name: CSST Nav
+Plugin Name: CSST Nav Shortcode
 Plugin URI: https://css-tricks.com
-Description: A widget for outputting a custom menu via a custom walker class.
+Description: A shortcode for outputting a custom menu via a custom walker class.
 Version: 1.0
 Author: Scott Fennell
 Author URI: http://scottfennell.org
@@ -51,14 +51,17 @@ define( 'CSST_NAV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CSST_NAV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CSST_NAV_INC_DIR', plugin_dir_path( __FILE__ ) . 'inc/' );
 
-// Grab our custom nav walker class.
-require_once( CSST_NAV_INC_DIR . 'class.csst-nav-walker.php' );
-
 // Grab our shortcode class.
-require_once( CSST_NAV_INC_DIR . 'class.csst-nav-shortcode.php' );
+require_once( CSST_NAV_INC_DIR . 'class.csst-nav.php' );
 
 // Register the shortcode with WordPress.
 require_once( CSST_NAV_INC_DIR . 'register-shortcode.php' );
 
-// A tiny bit of SVG for the nav toggles.
+// Grab our custom nav walker class, which our shortcode uses to draw the menu.
+require_once( CSST_NAV_INC_DIR . 'class.csst-nav-walker.php' );
+
+// A tiny bit of SVG for the nav toggles, which our walker uses for submenu UI.
 require_once( CSST_NAV_INC_DIR . 'class.csst-nav-svg.php' );
+
+// A tiny bit of php for formatting strings, mostly for CSS classes.
+require_once( CSST_NAV_INC_DIR . 'class.csst-nav-formatting.php' );
