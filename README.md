@@ -43,6 +43,8 @@ Screenshots
 
 ![The finished product.](https://raw.githubusercontent.com/scofennell/csst-nav/master/screenshots/finished.png?raw=true)
 
+![Using the shortcode in the post editor screen.](https://raw.githubusercontent.com/scofennell/csst-nav/master/screenshots/editor.png?raw=true)
+
 ![A demonstration of the $depth arg from the start_el() method.](https://raw.githubusercontent.com/scofennell/csst-nav/master/screenshots/start_el-depth.png?raw=true)
 
 Changelog
