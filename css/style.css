@@ -94,20 +94,6 @@
  * 4.0. Toggle Icons.
  */
 
- 	/* Set up an animation to rotate the toggle items. */
-	@keyframes open {
-		60%, 75%, 80%, 85%, 90%, 95%, to {
-			transform: rotate(-180deg);
-			animation-timing-function: ease;
-		}
-		60% { transform: rotate(-170deg); }
-		75% { transform: rotate(-200deg); }
-		80% { transform: rotate(-175deg); }
-		85% { transform: rotate(-190deg); }
-		90% { transform: rotate(-178deg); }
-		95% { transform: rotate(-185deg); }
-	} 
-
  	/* Set up the icon to animate upon toggle. */
 	.csst_nav_svg-icon {
 		height: .7em;
@@ -115,13 +101,11 @@
 		margin: 0 .4em;
 		vertical-align: -.15em;
 		transform-origin: 40% 40%;
+		transition: transform .5s ease-in-out;
 	}
 
 	/* When the menu is open, rotate the triangle to point up. */
-	.csst_nav_walker-item-toggle_link-open .csst_nav_svg-icon {
-		animation: open .5s cubic-bezier( .1, .25, 1, .25 ) forwards;
-	
-	}
+	.csst_nav_walker-item-toggle_link-open .csst_nav_svg-icon { transform: rotate( -180deg ); }
 
 	/* Some state styles for the icon. */
  	.csst_nav_svg-icon:hover,
