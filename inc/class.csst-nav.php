@@ -182,19 +182,25 @@ EOT;
 		// Get a menu from the db.
 		$which_menu = $this -> which_menu;
 
-		// Args for a call to wp_nav_menu().
+		/**
+		 * Args for a call to wp_nav_menu().
+		 * 
+		 * Some of these args don't get used by wp_nav_menu() per se,
+		 * but we're able to pass them through to our walker class, which does use them.
+		 */ 
 		$menu_args = array(
 
 			// Instead of wrapping each menu item as list item, let's do a span.
 			'after' => '</span>',
 
+			// The closing markup after a submenu.
 			'after_submenu' => '</span>',
 
 			// Instead of wrapping each menu item as list item, let's do a span.
 			'before' => '<span class="%s">',
 
+			// The opening markup before a submenu.
 			'before_submenu' => '<span class="%s">',
-
 
 			// Nope, we don't need extra markup wrapping our menu.
 			'container' => FALSE,

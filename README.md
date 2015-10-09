@@ -41,7 +41,7 @@ Installation
 Screenshots
 -----------
 
-![A demonstration of the $depth arg from the start_el() method.](https://raw.githubusercontent.com/scofennell/csst-nav/screenshots/start_el-depth.png?raw=true)
+![A demonstration of the $depth arg from the start_el() method.](https://raw.githubusercontent.com/scofennell/csst-nav/master/screenshots/start_el-depth.pngraw=true)
 
 Changelog
 ---------
