@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @package CSST Nav
+ * @package CSST_Nav
  */
 
 /*
 Plugin Name: CSST Nav
 Plugin URI: https://css-tricks.com
 Description: A widget for outputting a custom menu via a custom walker class.
-Version: 0.1
+Version: 1.0
 Author: Scott Fennell
 Author URI: http://scottfennell.org
 License: GPLv2 or later
@@ -37,11 +37,14 @@ if ( ! function_exists( 'add_action' ) ) {
 	exit;
 }
 
+// Define a slug for our plugin to use in CSS classes and such.
+define( 'CSST_NAV', 'csst_nav' );
+
 /**
  * Define a version that's more easily accessible than the docblock one,
  * for cache-busting.
  */
-define( 'CSST_NAV_VERSION', '0.1' );
+define( 'CSST_NAV_VERSION', '1.0' );
 
 // Define paths and urls for easy loading of files.
 define( 'CSST_NAV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -53,3 +56,9 @@ require_once( CSST_NAV_INC_DIR . 'class.csst-nav-walker.php' );
 
 // Grab our shortcode class.
 require_once( CSST_NAV_INC_DIR . 'class.csst-nav-shortcode.php' );
+
+// Register the shortcode with WordPress.
+require_once( CSST_NAV_INC_DIR . 'register-shortcode.php' );
+
+// A tiny bit of SVG for the nav toggles.
+require_once( CSST_NAV_INC_DIR . 'class.csst-nav-svg.php' );

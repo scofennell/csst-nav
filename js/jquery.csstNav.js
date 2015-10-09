@@ -7,22 +7,9 @@
  *
  * @see https://learn.jquery.com/plugins/basic-plugin-creation/
  * @package WordPress
- * @subpackage Twenty_Fifteen
- * @since Twenty Fifteen 1.0
+ * @subpackage CSST_Nav
+ * @since CSST Nav 1.0
  */
-
-/**
- * Upon dom ready, apply our jQuery plugin to elements with our CSS class.
- */
-jQuery( document ).ready( function( $ ) {
-
-	// All of our menus carry this CSS class.
-	var el = $( '.csst_nav' );
-
-	// Apply our jquery plugin to our menus.
-	$( el ).csstNav();
-
-});
 
 /**
  * Protect the '$' alias from other JS.
@@ -40,27 +27,33 @@ jQuery( document ).ready( function( $ ) {
 	 */
 	$.fn.csstNav = function( options ) {
 
+		// Grab the selector that was used to invoke the plugin.
+		var selector = this.selector;
+
+		// We'll use this to build css classes.
+		var prefix = 'csst_nav';
+
+		// Log our plugin.
+		console.log( 'csstNav() applied to `' + selector + '`. Options:' );
+		console.log( options );
+
 		/**
 		 * This gets called when the user clicks a submenu toggle link.
 		 * 
 		 * @param  {object} link The toggle link that was just clicked.
 		 */
 		function runToggle( link ) {
-
+			
 			// Find the submenu that this link applies to.
-			var submenu = $( link ).closest( '.csst_nav_walker-item' ).find( ' > .csst_nav_walker-submenu' );
-
-			// Find the icon that this link applies to.
-			var icon = $( link ).find( ' > .csst_nav_walker-get_icon' );
+			var submenu = $( link ).siblings( '.' + prefix + '_walker-submenu' );
 
 			// Toggle classes on that submenu for show/hide.
-			$( submenu ).toggleClass( 'csst_nav_walker-hide csst_nav_walker-show' );
-
-			// Toggle classes on that icon for up/down.
-			$( icon ).toggleClass( 'csst_nav_walker-get_icon-down csst_nav_walker-get_icon-up' );
+			$( submenu ).toggleClass( prefix + '_walker-hide' ); 
+			$( submenu ).toggleClass( prefix + '_walker-show' );
 
 			// Toggle classes on the menu item itself.
-			$( link ).toggleClass( 'csst_nav_walker-item-toggle_link-open csst_nav_walker-item-toggle_link-closed' );
+			$( link ).toggleClass( prefix + '_walker-item-toggle_link-open' );
+			$( link ).toggleClass( prefix + '_walker-item-toggle_link-closed' );
 
 		}
 		
@@ -75,7 +68,7 @@ jQuery( document ).ready( function( $ ) {
 			// The toggle link for show/hiding a submenu.
 			var toggleHandle = $( that ).find( '.csst_nav_walker-item-toggle_link' );
 			
-			// The user has clicked th toggler!
+			// The user has clicked the toggler!
 			$( toggleHandle ).on( 'click', function( event ) {
 				
 				// Don't navigate to a new page.

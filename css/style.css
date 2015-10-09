@@ -5,8 +5,8 @@
  * like :hover status, click handlers, nesting, show/hide, etc. 
  *
  * @package WordPress
- * @subpackage Twenty_Fifteen
- * @since Twenty Fifteen 1.0
+ * @subpackage CSST_Nav
+ * @since CSST Nav 1.0
  */
 
 /**
@@ -39,9 +39,9 @@
 	/**
 	 * State effects for our nav links.
 	 */
-	a.csst_nav_walker-item-link:hover,
-	a.csst_nav_walker-item-link:active,
-	a.csst_nav_walker-item-link:focus { text-decoration: underline; }
+	a.csst_nav_walker-item-text_link:hover,
+	a.csst_nav_walker-item-text_link:active,
+	a.csst_nav_walker-item-text_link:focus { text-decoration: underline; }
 
 /**
  * 2.0. Submenus.
@@ -93,48 +93,16 @@
  * 4.0. Toggle Icons.
  */
 
- 	/**
- 	 * A class carried by all of our toggle icons. 
- 	 *
- 	 * 1. This sets us up for an equilateral triangle.  Don't edit this.
- 	 * 2. We'll color the "active" border as needed for each individual icon.
- 	 * 3. Make sure they're small enough to not influence the line-height. Don't edit this.
- 	 * 4. Nothing special, just some horizontal whitespace to taste.
- 	 * 5. Our one-stop shop for messing with the size of the icon, rather than
- 	 *    re-calculating appropriate border-width.  This is what you'd edit for
- 	 *    larger/smaller triangles.
- 	 * 
- 	 * These are CSS triangles.
- 	 * @see https://css-tricks.com/snippets/css/css-triangle/
- 	 */
-	.csst_nav_walker-get_icon {
-		width: 0; 
-		height: 0; 
-		border-style: solid;
-		border-width: 1em;         /* 1 */ 
-		border-color: transparent; /* 2 */
-		display: inline-block;     
-		font-size: .5em;           /* 3 */          
-		vertical-align: middle;
-		margin: 0 .5em;            /* 4 */
-		transform: scale( .66 );   /* 5 */
+ 	/* Set up the icon to animate upon toggle. */
+	.csst_nav_svg-icon {
+		height: .6em;
+		width: .6em;
+		margin: 0 .2em;
+		transition: transform .5s ease-in-out;
 	}
 
-	/**
-	 * A down-pointing CSS equilateral triangle.
-	 *
-	 * 1. The magic number for ending up with an equilateral triangle.
-	 * 2. Meh, I'll admit it, I'm nudging.  Edit to taste.
-	 */
-	.csst_nav_walker-get_icon-down {
-		border-top: 1.66em solid currentColor; /* 1 */
-		margin-top: .66em;                      /* 2 */
-	}
+	/* When the menu is open, rotate the triangle to point up. */
+	.csst_nav_walker-item-toggle_link-open .csst_nav_svg-icon { transform: rotate( -180deg ); }
 
-	/**
-	 * A up-pointing CSS equilateral triangle.
-	 */
-	.csst_nav_walker-get_icon-up {
-		border-bottom: 1.66em solid currentColor;
-		margin-top: -.66em;
-	}
+ 	.csst_nav_svg-icon:hover,
+	.csst_nav_svg-icon:focus { opacity: .5; }

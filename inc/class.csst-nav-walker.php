@@ -1,46 +1,30 @@
 <?php
 
 /**
- * Here's how we're getting a highly customized menu output.
- * 
+ * Our custom walker class -- basically the whole purpose of this plugin.
+ *
+ * @package WordPress
+ * @subpackage CSST_Nav
+ * @since CSST Nav 1.0
+ */
+
+/**
  * @see https://core.trac.wordpress.org/browser/tags/4.2.2/src//wp-includes/nav-menu-template.php#L0 
  */
 class CSST_Nav_Walker extends Walker_Nav_Menu {
 
-	/**
-	 * Provide the opening markup for a new menu within our menu (AKA a submenu).
-	 * 
-	 * I'm just pasting these params from trac, with no understanding of them.
-	 * 
-	 * @param string $output Passed by reference. Used to append additional content.
-	 * @param int    $depth  Depth of menu item. Used for padding.
-	 * @param array  $args   An array of arguments. @see wp_nav_menu()
-	 */
-	public function start_lvl( &$output, $depth = 0, $args = array() ) {
+	// We'll grab a little triangle icon to use in our menu, just wait.
+	public $icon = '';
+
+	public function __construct() {
+
+		// Start our icon class.
+		$svg = new CSST_Nav_SVG;
 		
-		// The CSS class for our menu.
-		$class = strtolower( __CLASS__ );
+		// Grab a triangle.
+		$icon = $svg -> get();
+		$this -> icon = $icon;
 
-		$submenu_class = "$class-submenu";
-		$hide_class = "$class-hide";
-	
-		$output .= "<span class='$submenu_class $hide_class'>";
-
-	}
-
-	/**
-	 * This oddly named fellow does nothing other than end a menu item.
-	 * 
-	 * I'm just pasting these params from trac, with no understanding of them.
-	 *
-	 * @param string $output Passed by reference. Used to append additional content.
-	 * @param int    $depth  Depth of menu item. Used for padding.
-	 * @param array  $args   An array of arguments. @see wp_nav_menu()
-	 */
-	public function end_lvl( &$output, $depth = 0, $args = array() ) {
-
-		// Since it's passed by reference, we don't need to return anything.
-		$output .= '</span>';
 	}
 
 	/**
@@ -56,6 +40,8 @@ class CSST_Nav_Walker extends Walker_Nav_Menu {
 	 */
 	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
 
+		var_dump( $id );
+
 		/**
 		 * Deal with the class names for the menu item.
 		 * 
@@ -66,9 +52,9 @@ class CSST_Nav_Walker extends Walker_Nav_Menu {
 		$classes[]= $class;
 
 		// Does this menu item have children?
-		if ( $args -> has_children ) {
-			$classes[]= "$class-has_children";
-		}
+		//if ( $args -> has_children ) {
+		//	$classes[]= "$class-has_children";
+		//}
 
 		$classes  = array_map( 'sanitize_html_class', $classes );
 		$classes  = implode( ' ', $classes );
@@ -94,27 +80,8 @@ class CSST_Nav_Walker extends Walker_Nav_Menu {
 		$label = wp_kses_post( $item -> title );
 		$link  = "<a $attributes class='$class-link $class-text_link'>$label</a>";
 
-		// Deal with sub menus.
-		if ( $args -> has_children ) {
-
-			$icon = $this -> get_icon( 'down' );
-			
-			$dropdown_label = esc_html__( 'Sub-Menu', 'csst-nav' );
-			$dropdown       = "$icon<span class='screen-reader-text'>$dropdown_label</span>";
-			$link          .= "<a href='#' class='$class-toggle_link $class-link $class-toggle_link-closed'>$dropdown</a>";
-		
-		}
-
 		// Since it's passed by reference, we don't need to return anything.
 		$output .= $link;
-
-	}
-
-	public function get_icon( $direction ) {
-
-		$class = strtolower( __CLASS__ . '-' . __FUNCTION__ );
-
-		return "<span class='$class $class-$direction'></span>";
 
 	}
 
@@ -135,39 +102,43 @@ class CSST_Nav_Walker extends Walker_Nav_Menu {
 	}
 
 	/**
-	 * A function I stole from Twitter Bootstrap.  All it does is add a property to the menu item object to denote if it has children, and output the menu item.
+	 * Provide the opening markup for a new menu within our menu (AKA a submenu).
 	 * 
-	 * I'm just pasting these params from github.  Who knows that they really mean.
-	 * 
-	 * @param object $element Data object
-	 * @param array $children_elements List of elements to continue traversing.
-	 * @param int $max_depth Max depth to traverse.
-	 * @param int $depth Depth of current element.
-	 * @param array $args
 	 * @param string $output Passed by reference. Used to append additional content.
-	 * @return null Null on failure with no changes to parameters.
+	 * @param int    $depth  Depth of menu item. Used for padding.
+	 * @param array  $args   An array of arguments. @see wp_nav_menu()
 	 */
-	public function display_element( $element, &$children_elements, $max_depth, $depth, $args, &$output ) {
-	   
-		// I don't know what these are but they look important.
-		if ( ! $element ) { return; }
-		if( ! isset( $this -> db_fields['id'] ) ) { return; }
-
-		// You're guess is as good as mine.
-		$id_field = $this -> db_fields['id'];
+	public function start_lvl( &$output, $depth = 0, $args = array() ) {
 		
-		// Add a property to the menu item to determine if it has a sub menu.
-		if ( is_object( $args[0] ) ) {
-			$has_children = FALSE;
-			if( ! empty( $children_elements[ $element -> $id_field ] ) ) {
-				$has_children = TRUE;
-			}
-			$args[0] -> has_children = $has_children;
-		}
+		// The CSS class for our menu.
+		$class = strtolower( __CLASS__ );
 
-		// Output the menu item.
-		parent::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
+		$icon = $this -> icon;
+			
+		$dropdown_label = esc_html__( 'Sub-Menu', 'csst-nav' );
+		$dropdown       = "$icon<span class='screen-reader-text'>$dropdown_label</span>";
+		$output        .= "<a href='#' class='$class-item-toggle_link $class-item-link $class-item-toggle_link-closed'>$dropdown</a>";
+
+		$submenu_class = "$class-submenu";
+		$hide_class = "$class-hide";
 	
+		$output .= "<span class='$submenu_class $hide_class'>";
+
 	}
 
-} // Walker_Nav_Menu
+	/**
+	 * This oddly named fellow does nothing other than end a menu item.
+	 * 
+	 * I'm just pasting these params from trac, with no understanding of them.
+	 *
+	 * @param string $output Passed by reference. Used to append additional content.
+	 * @param int    $depth  Depth of menu item. Used for padding.
+	 * @param array  $args   An array of arguments. @see wp_nav_menu()
+	 */
+	public function end_lvl( &$output, $depth = 0, $args = array() ) {
+
+		// Since it's passed by reference, we don't need to return anything.
+		$output .= '</span>';
+	}
+
+}
