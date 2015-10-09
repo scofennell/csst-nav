@@ -116,7 +116,7 @@ class CSST_Nav_Walker extends Walker_Nav_Menu {
 	 */
 	public function end_el( &$output, $item, $depth = 0, $args = array() ) {
 		
-		// Grab the closing html that we specified in the shortcode.
+		// Grab the closing html that we defined in the shortcode cb.
 		$after = $args -> after;
 
 		// Passed by reference, thus no need to return a value.
@@ -145,13 +145,18 @@ class CSST_Nav_Walker extends Walker_Nav_Menu {
 		$toggle_link  = "<a href='#' class='$class-item-toggle_link $class-item-link $class-item-toggle_link-closed'>$toggle_label</a>";
 
 		// Build some classes for our submenu, assuming we want it hidden.
-		$submenu_class = "$class-submenu";
-		$hide_class    = "$class-hide";
+		$submenu_classes = "$class-submenu $class-hide";
 	
+		// Grab the opening html for the menu item, which we specified in wp_nav_menu() in our shortcode.
+		$before_submenu = $args -> before_submenu;
+
+		// Merge our css classes into the menu item.
+		$before_submenu = sprintf( $before_submenu, $submenu_classes );
+
 		// Append the toggle link and the hidden submenu to the nav menu.
 		$output .= "
 			$toggle_link
-			<span class='$submenu_class $hide_class'>
+			$before_submenu
 		";
 
 	}
@@ -165,8 +170,12 @@ class CSST_Nav_Walker extends Walker_Nav_Menu {
 	 */
 	public function end_lvl( &$output, $depth = 0, $args = array() ) {
 
-		// Since it's passed by reference, we don't need to return anything.
-		$output .= '</span>';
+		// Grab the closing html that we defined in the shortcode cb.
+		$after = $args -> after_submenu;
+
+		// Passed by reference, thus no need to return a value.
+		$output .= $after;
+		
 	}
 
 }

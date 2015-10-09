@@ -188,8 +188,13 @@ EOT;
 			// Instead of wrapping each menu item as list item, let's do a span.
 			'after' => '</span>',
 
+			'after_submenu' => '</span>',
+
 			// Instead of wrapping each menu item as list item, let's do a span.
 			'before' => '<span class="%s">',
+
+			'before_submenu' => '<span class="%s">',
+
 
 			// Nope, we don't need extra markup wrapping our menu.
 			'container' => FALSE,
