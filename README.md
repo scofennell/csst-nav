@@ -1,13 +1,13 @@
-CSST Nav
+CSST Nav Shortcode
 =======================
 
-Grab your Ecwid products and categories into a variety of WordPress widgets, including a slider, a popup, and an accordion.
+A shortcode for outputting a custom menu via a custom walker class.
 
 ###### Contributors
 scofennell@gmail.com
 
 ###### Tags
-CSS-Tricks, Article, WordPress, Shortcode.
+CSS-Tricks, Article, WordPress, Shortcode, Walker.
 
 ###### Requires at least
 4.3.1
@@ -35,7 +35,7 @@ Installation
 
 1. Upload the `csst-nav` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Use the shortcode [csst_nav] in any post.
+3. Use the shortcode [csst_nav which_menu='5'] in any post, where 5 is the ID, name, or slug of a custom menu.
 
 
 Screenshots
